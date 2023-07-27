@@ -24,7 +24,7 @@ func (c *Convert) ToJson(f *MediaFile, force bool) (jsonName string, err error) 
 		return "", nil
 	}
 
-	if fs.FileExists(jsonName) {
+	if !force && fs.FileExists(jsonName) {
 		return jsonName, nil
 	}
 

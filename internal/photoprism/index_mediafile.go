@@ -422,7 +422,8 @@ func (ind *Index) UserMediaFile(m *MediaFile, o IndexOptions, originalName, phot
 			photo.PhotoType = entity.MediaAnimated
 		}
 	case m.IsXMP():
-		if metaData, err := meta.XMP(m.FileName()); err == nil {
+		var jsonname,_= ind.convert.ToJson(m, false)
+		if metaData, err := meta.JSON(jsonname, ""); err == nil {
 			// Update basic metadata.
 			photo.SetTitle(metaData.Title, entity.SrcXmp)
 			photo.SetDescription(metaData.Description, entity.SrcXmp)
