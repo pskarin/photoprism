@@ -27,6 +27,7 @@ import (
 
 	"github.com/photoprism/photoprism/internal/entity"
 	"github.com/photoprism/photoprism/internal/meta"
+	"github.com/photoprism/photoprism/internal/thumb"
 	"github.com/photoprism/photoprism/pkg/clean"
 	"github.com/photoprism/photoprism/pkg/fs"
 	"github.com/photoprism/photoprism/pkg/media"
@@ -1154,6 +1155,10 @@ func (m *MediaFile) Portrait() bool {
 // Orientation returns the Exif orientation of the media file.
 func (m *MediaFile) Orientation() int {
 	if data := m.MetaData(); data.Error == nil {
+		if ((data.Orientation == thumb.OrientationRotate90 || data.Orientation == thumb.OrientationRotate270) && data.Width < data.Height) {
+			log.Tracef("Overriding orientation %d for file %s", data.Orientation, m.fileName)
+			data.Orientation = 1
+		}
 		return data.Orientation
 	}
 
